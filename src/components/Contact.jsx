@@ -209,7 +209,7 @@ export default function Contact() {
             {/* Booked Appointments for Selected Date */}
             {form.date && (
               <div className="booked-appointments">
-                <h3>Booked Appointments for {new Date(form.date).toLocaleDateString()}</h3>
+                <h3>Booked Appointments for {new Date(form.date).toLocaleDateString('en-US')}</h3>
                 {loading ? (
                   <p>Loading booked appointments...</p>
                 ) : bookedAppointments.length === 0 ? (

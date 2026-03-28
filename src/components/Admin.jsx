@@ -125,7 +125,7 @@ export default function Admin({ onLogout }) {
                       <td>{b.phone}</td>
                       <td>{b.email || '—'}</td>
                       <td><span className="service-tag">{b.service}</span></td>
-                      <td>{new Date(b.date).toLocaleString()}</td>
+                      <td>{new Date(b.date).toLocaleString('en-US')}</td>
                       <td>
                         <span className={`status-badge ${b.status ? 'status-completed' : 'status-pending'}`}>
                           {b.status ? 'Completed' : 'Pending'}
