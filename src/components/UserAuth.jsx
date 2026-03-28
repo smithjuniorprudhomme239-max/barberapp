@@ -31,8 +31,8 @@ export default function UserAuth({ onSuccess, onClose }) {
     } else {
       const res = await signup(form.name, form.email, form.password)
       if (res.ok) {
-        setSuccess('Sign up successful!')
-        setTimeout(() => onSuccess(), 1000)
+        setSuccess('Sign up successful! Please check your email to verify your account.')
+        setTimeout(() => onSuccess(), 2000)
       } else {
         setError(res.msg)
       }

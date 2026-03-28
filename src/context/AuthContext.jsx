@@ -39,7 +39,8 @@ export function AuthProvider({ children }) {
       email,
       password,
       options: {
-        data: { name }
+        data: { name },
+        emailRedirectTo: window.location.origin
       }
     })
     if (error) return { ok: false, msg: error.message }
