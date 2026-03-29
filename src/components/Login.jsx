@@ -69,9 +69,6 @@ export default function Login({ onSuccess, onClose }) {
           {error && <p className="login-error">{error}</p>}
           {success && <p className="login-success">{success}</p>}
         <button type="submit">Login</button>
-          <p className="forgot-password">
-            <span onClick={() => setShowForgotPassword(true)}>Forgot Password?</span>
-          </p>
         </form>
       ) : (
         <form className="login-form" onSubmit={handleForgotPassword}>

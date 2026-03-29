@@ -14,7 +14,7 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.05);
 }
 
 .hero-content {
@@ -29,6 +29,7 @@
   text-shadow: 2px 2px 8px rgba(0,0,0,0.9);
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: #fff;
 }
 
 .hero-content p {
@@ -41,6 +42,13 @@
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .hero-btn {
@@ -61,6 +69,18 @@
 }
 
 .hero-btn:hover { 
-  background: #e0b015; 
   transform: translateY(-2px);
+}
+
+.hero-btn:hover {
+  background: #e0b015;
+}
+
+.hero-btn.market-btn {
+  background: #f5c518;
+  color: #111;
+}
+
+.hero-btn.market-btn:hover {
+  background: #e0b015;
 }

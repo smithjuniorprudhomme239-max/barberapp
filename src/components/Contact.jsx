@@ -138,7 +138,7 @@ export default function Contact() {
       <div className="contact-inner">
         <div className="contact-info">
           <p>📞 (555) 123-4567</p>
-          <p>✉️ hello@fadeking.com</p>
+          <p>✉️ dukenssmithp@gmail</p>
           <p>🕐 Mon–Sat: 9am – 7pm</p>
           <p>🕐 Sun: 10am – 4pm</p>
         </div>

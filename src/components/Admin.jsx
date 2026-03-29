@@ -75,8 +75,8 @@ export default function Admin({ onLogout }) {
           <div className="stat-card">
             <span className="stat-icon">📅</span>
             <div>
-              <p className="stat-value">{bookings.length}</p>
-              <p className="stat-label">Total Bookings</p>
+              <p className="stat-value">{new Date().toLocaleDateString('en-US')}</p>
+              <p className="stat-label">Current Date</p>
             </div>
           </div>
           <div className="stat-card">

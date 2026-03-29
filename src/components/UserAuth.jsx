@@ -105,11 +105,7 @@ export default function UserAuth({ onSuccess, onClose }) {
 
           <button type="submit">{mode === 'login' ? 'Login' : 'Sign Up'}</button>
 
-          {mode === 'login' && (
-            <p className="forgot-password">
-              <span onClick={() => setShowForgotPassword(true)}>Forgot Password?</span>
-            </p>
-          )}
+
 
           <p className="auth-toggle">
             {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}

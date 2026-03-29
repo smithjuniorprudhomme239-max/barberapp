@@ -41,7 +41,7 @@ function AppContent() {
   return (
     <>
       <Navbar onAdminClick={() => setPage('adminLogin')} onUserAuthClick={() => setPage('userAuth')} onMarketClick={() => setPage('market')} />
-      <Hero />
+      <Hero onMarketClick={() => setPage('market')} />
       <Services />
       <Gallery />
       <About />

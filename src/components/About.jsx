@@ -8,18 +8,18 @@ export default function About() {
         <div className="about-text">
           <h2>About Us</h2>
           <p>
-            DuckensBarber has been serving the community for over 10 years. We believe every client
+            DuckensBarber has been serving the community for over 2 years. We believe every client
             deserves a premium experience — from the moment you walk in to the moment you leave
             looking your best.
           </p>
           <p>
-            Our barbers are highly trained professionals passionate about their craft. Whether
+            Our barber is a highly trained professional passionate about their craft. Whether
             you want a classic cut or the latest trend, we've got you covered.
           </p>
           <div className="stats">
-            <div><strong>10+</strong><span>Years Open</span></div>
-            <div><strong>5k+</strong><span>Happy Clients</span></div>
-            <div><strong>4</strong><span>Expert Barbers</span></div>
+            <div><strong>2+</strong><span>Years Open</span></div>
+            <div><strong>200</strong><span>Happy Clients</span></div>
+            <div><strong>1</strong><span>Expert Barber</span></div>
           </div>
         </div>
       </div>
