@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Gallery.css'
 
 const photos = [
@@ -12,7 +12,23 @@ const photos = [
 
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null)
-  const [showAll, setShowAll] = useState(true)
+  const [showAll, setShowAll] = useState(false)
+
+  // Set initial state based on screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setShowAll(window.innerWidth >= 768) // Show all on desktop, only one on mobile
+    }
+
+    // Set initial state
+    checkScreenSize()
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize)
+
+    // Clean up event listener
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const openLightbox = (src) => {
     setSelectedImage(src)

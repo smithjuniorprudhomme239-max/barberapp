@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Services.css'
 
 const services = [
@@ -12,6 +12,22 @@ const services = [
 
 export default function Services() {
   const [showAll, setShowAll] = useState(false)
+  
+  // Set initial state based on screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setShowAll(window.innerWidth >= 768) // Show all on desktop, only 3 on mobile
+    }
+
+    // Set initial state
+    checkScreenSize()
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize)
+
+    // Clean up event listener
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
   
   const displayServices = showAll ? services : services.slice(0, 3)
   
