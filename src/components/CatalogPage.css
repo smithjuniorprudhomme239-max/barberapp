@@ -38,30 +38,38 @@
   color: #fff;
 }
 
-.cart-icon {
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  color: #fff;
-  cursor: pointer;
+/* Search Container */
+.search-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
 }
 
-.cart-icon:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.search-input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #cc0000;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1);
 }
 
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.product-card {
+.catalog-product-card {
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
@@ -70,53 +78,46 @@
   cursor: pointer;
 }
 
-.product-card:hover {
+.catalog-product-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
-.product-image {
-  height: 200px;
+.catalog-product-image {
+  width: 100%;
+  aspect-ratio: 2/ 2;
   overflow: hidden;
+  background: #f0f0f0;
 }
 
-.product-image img {
+.catalog-product-image img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  display: block;
   transition: transform 0.3s;
 }
 
-.product-card:hover .product-image img {
+.catalog-product-card:hover .catalog-product-image img {
   transform: scale(1.05);
 }
 
-.product-info {
+.catalog-product-info {
   padding: 1.5rem;
 }
 
-.product-info h3 {
+.catalog-product-info h3 {
   font-size: 1.2rem;
   font-weight: 600;
   color: #111;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
-.product-price {
+.catalog-product-price {
   font-size: 1.1rem;
   font-weight: 700;
   color: #111;
   margin-bottom: 0.75rem;
 }
-
-.product-description {
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-}
-
-/* Removed add to cart button styles as they're no longer needed */
 
 .loading-products,
 .no-products {
@@ -126,8 +127,6 @@
   color: #666;
   font-size: 1.1rem;
 }
-
-/* Removed cart-related styles as they're no longer needed */
 
 /* Lightbox styles */
 .lightbox {
@@ -153,11 +152,11 @@
 
 .lightbox-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  top: 12px;
+  right: 12px;
+  background:white;
   border: none;
-  color: white;
+  color:red;
   font-size: 1.5rem;
   cursor: pointer;
   width: 30px;
@@ -171,10 +170,10 @@
 }
 
 .lightbox-close:hover {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: #a80000;
 }
 
-.lightbox-product-card {
+.catalog-lightbox-product-card {
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
@@ -187,7 +186,7 @@
   overflow: hidden;
 }
 
-.lightbox-product-card .product-image {
+.catalog-lightbox-product-card .catalog-product-image {
   width: 50%;
   height: auto;
   max-height: 85vh;
@@ -195,46 +194,12 @@
   overflow: hidden;
 }
 
-.lightbox-product-card .product-image img {
+.catalog-lightbox-product-card .catalog-product-image img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   border-radius: 8px 0 0 8px;
 }
-
-.lightbox-product-card .product-info {
-  width: 50%;
-  padding: 2rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.lightbox-product-card .product-info h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.lightbox-product-card .product-price {
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
-}
-
-.lightbox-product-card .product-description {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  flex-grow: 1;
-}
-
-.lightbox-product-card .add-to-cart-btn {
-  margin-top: auto;
-  font-size: 1.1rem;
-  padding: 1rem;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -261,27 +226,28 @@
     padding: 1rem;
   }
 
+  .search-container {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+
   .products-grid {
     grid-template-columns: 1fr;
-    padding: 1rem;
+    padding: 0.5rem;
     gap: 1.5rem;
   }
 
-  .cart-section {
-    width: 100%;
-  }
-
-  .lightbox-product-card {
+  .catalog-lightbox-product-card {
     flex-direction: column;
     max-height: 90vh;
   }
 
-  .lightbox-product-card .product-image {
+  .catalog-lightbox-product-card .catalog-product-image {
     width: 100%;
     height: 300px;
   }
 
-  .lightbox-product-card .product-info {
+  .catalog-lightbox-product-card .catalog-product-info {
     width: 100%;
     padding: 1.5rem;
   }
