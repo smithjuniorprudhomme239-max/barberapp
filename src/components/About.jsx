@@ -4,7 +4,7 @@ export default function About() {
   return (
     <section id="about" className="section about">
       <div className="about-inner">
-        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600" alt="barber" />
+        <img src="https://i.postimg.cc/rpL8RLnW/jimeng-2026-03-29-8449-clean-the-mirror.png" alt="barber" />
         <div className="about-text">
           <h2>About Us</h2>
           <p>
