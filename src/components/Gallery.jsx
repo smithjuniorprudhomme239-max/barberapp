@@ -12,7 +12,7 @@ const photos = [
 
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null)
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(true)
 
   const openLightbox = (src) => {
     setSelectedImage(src)

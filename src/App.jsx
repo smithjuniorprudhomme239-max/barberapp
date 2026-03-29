@@ -11,6 +11,7 @@ import Login from './components/Login'
 import Admin from './components/Admin'
 import UserAuth from './components/UserAuth'
 import MarketPage from './components/MarketPage'
+import CatalogPage from './components/CatalogPage'
 import PasswordReset from './components/PasswordReset'
 import './App.css'
 
@@ -36,11 +37,12 @@ function AppContent() {
   if (page === 'admin' && !user) return <Login onSuccess={() => setPage('admin')} onClose={() => setPage('home')} />
   if (page === 'userAuth') return <UserAuth onSuccess={() => setPage('home')} onClose={() => setPage('home')} />
   if (page === 'market') return <MarketPage onBack={() => setPage('home')} />
+  if (page === 'catalog') return <CatalogPage onBack={() => setPage('home')} />
   if (page === 'resetPassword') return <PasswordReset onSuccess={() => setPage('home')} onClose={() => setPage('home')} />
 
   return (
     <>
-      <Navbar onAdminClick={() => setPage('adminLogin')} onUserAuthClick={() => setPage('userAuth')} onMarketClick={() => setPage('market')} />
+      <Navbar onAdminClick={() => setPage('adminLogin')} onUserAuthClick={() => setPage('userAuth')} onMarketClick={() => setPage('market')} onCatalogClick={() => setPage('catalog')} />
       <Hero onMarketClick={() => setPage('market')} />
       <Services />
       <Gallery />

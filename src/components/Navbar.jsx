@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
 
-const links = ['Services', 'Gallery', 'About', 'Contact']
+const links = ['Services', 'Gallery', 'About', 'Contact', 'Catalog']
 
-export default function Navbar({ onAdminClick, onUserAuthClick, onMarketClick }) {
+export default function Navbar({ onAdminClick, onUserAuthClick, onMarketClick, onCatalogClick }) {
   const [open, setOpen] = useState(false)
   const { user, logout } = useAuth()
 
@@ -18,6 +18,7 @@ export default function Navbar({ onAdminClick, onUserAuthClick, onMarketClick })
         ))}
         <li><a href="#contact" className="btn-book" onClick={() => setOpen(false)}>Book Now</a></li>
         <li><button className="btn-book" onClick={() => { setOpen(false); onMarketClick(); }}>Market</button></li>
+        <li><button className="btn-book" onClick={() => { setOpen(false); onCatalogClick(); }}>Catalog</button></li>
         <li>
           {user
             ? <button className="btn-admin" onClick={logout} style={{ color: '#cc0000' }}>⬅ Logout</button>
