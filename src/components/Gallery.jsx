@@ -3,7 +3,7 @@ import './Gallery.css'
 
 const photos = [
   'https://i.postimg.cc/sDbrhR60/jimeng-2026-03-29-3383-make-this-picture-more-clear-and-higher.png',
-  'https://i.postimg.cc/sDbrhR60/jimeng-2026-03-29-3383-make-this-picture-more-clear-and-higher.png',
+  'https://i.postimg.cc/d00QRKPb/Gemini-Generated-Image-cvz5yqcvz5yqcvz5.png',
   'https://i.postimg.cc/sDbrhR60/jimeng-2026-03-29-3383-make-this-picture-more-clear-and-higher.png',
   'https://i.postimg.cc/sDbrhR60/jimeng-2026-03-29-3383-make-this-picture-more-clear-and-higher.png',
   'https://i.postimg.cc/sDbrhR60/jimeng-2026-03-29-3383-make-this-picture-more-clear-and-higher.png',
