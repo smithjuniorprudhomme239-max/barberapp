@@ -11,6 +11,8 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [userAppointments, setUserAppointments] = useState([])
   const [loadingUserAppointments, setLoadingUserAppointments] = useState(false)
+  const [availabilityMessage, setAvailabilityMessage] = useState('')
+  const [loadingAvailability, setLoadingAvailability] = useState(false)
 
   const handle = e => {
     const newForm = { ...form, [e.target.name]: e.target.value }
@@ -103,11 +105,33 @@ export default function Contact() {
     }
   }
 
+  const fetchAvailabilityMessage = async () => {
+    setLoadingAvailability(true)
+    try {
+      const { data, error } = await supabase
+        .from('availability')
+        .select('message')
+        .eq('id', 1)
+        .single()
+      
+      if (error) {
+        console.error('Error fetching availability message:', error)
+      } else {
+        setAvailabilityMessage(data?.message || '')
+      }
+    } catch (error) {
+      console.error('Error fetching availability message:', error)
+    } finally {
+      setLoadingAvailability(false)
+    }
+  }
+
   // Fetch user appointments when component mounts or user changes
   useEffect(() => {
     if (user) {
       fetchUserAppointments()
     }
+    fetchAvailabilityMessage()
   }, [user])
 
   const submit = async e => {
@@ -135,6 +159,11 @@ export default function Contact() {
   return (
     <section id="contact" className="section contact">
       <h2>Book an Appointment</h2>
+      {availabilityMessage && (
+        <div className="availability-message">
+          <p>{availabilityMessage}</p>
+        </div>
+      )}
       <div className="contact-inner">
         <div className="contact-info">
           <p>📞 (555) 123-4567</p>

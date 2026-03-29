@@ -6,6 +6,9 @@ export default function Admin({ onLogout }) {
   const { adminLogout, user } = useAuth()
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
+  const [availabilityMessage, setAvailabilityMessage] = useState('')
+  const [loadingMessage, setLoadingMessage] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   const fetchBookings = async () => {
     console.log('Fetching bookings...')
@@ -24,8 +27,52 @@ export default function Admin({ onLogout }) {
     }
   }
 
+  const fetchAvailabilityMessage = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('availability')
+        .select('message')
+        .eq('id', 1)
+        .single()
+      
+      if (error) {
+        console.error('Error fetching availability message:', error)
+      } else {
+        setAvailabilityMessage(data?.message || '')
+      }
+    } catch (error) {
+      console.error('Error fetching availability message:', error)
+    }
+  }
+
+  const updateAvailabilityMessage = async () => {
+    setLoadingMessage(true)
+    setSuccessMessage('')
+    try {
+      const { data, error } = await supabase
+        .from('availability')
+        .upsert({ id: 1, message: availabilityMessage })
+        .select()
+        .single()
+      
+      if (error) {
+        console.error('Error updating availability message:', error)
+      } else {
+        console.log('Availability message updated successfully')
+        setSuccessMessage('Availability message updated successfully!')
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccessMessage(''), 3000)
+      }
+    } catch (error) {
+      console.error('Error updating availability message:', error)
+    } finally {
+      setLoadingMessage(false)
+    }
+  }
+
   useEffect(() => {
     fetchBookings()
+    fetchAvailabilityMessage()
   }, [])
 
   const toggleBookingStatus = async (bookingId, currentStatus) => {
@@ -92,6 +139,31 @@ export default function Admin({ onLogout }) {
               <p className="stat-value">{services}</p>
               <p className="stat-label">Services Booked</p>
             </div>
+          </div>
+        </div>
+
+        {/* Availability Message */}
+        <div className="admin-availability">
+          <h2>Availability Message</h2>
+          <div className="availability-form">
+            <textarea
+              placeholder="Enter availability message (e.g., 'We're currently fully booked for the next 2 weeks')"
+              value={availabilityMessage}
+              onChange={(e) => setAvailabilityMessage(e.target.value)}
+              rows={4}
+            />
+            {successMessage && (
+              <div className="success-message">
+                {successMessage}
+              </div>
+            )}
+            <button
+              className="update-message-btn"
+              onClick={updateAvailabilityMessage}
+              disabled={loadingMessage}
+            >
+              {loadingMessage ? 'Updating...' : 'Update Message'}
+            </button>
           </div>
         </div>
 

@@ -40,6 +40,37 @@
   border-radius: 2px;
 }
 
+.availability-message {
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+  padding: 0;
+  background: transparent;
+  color: red;
+  border-radius: 0;
+  font-weight: 600;
+  box-shadow: none;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  text-align: center;
+}
+
+.availability-message p {
+  margin: 0;
+  font-size: 1.1rem;
+  display: inline-block;
+  animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .contact-info {
   background: #f5f5f5;
   border-radius: 12px;
