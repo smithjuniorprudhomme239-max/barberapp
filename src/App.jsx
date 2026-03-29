@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -11,11 +11,21 @@ import Login from './components/Login'
 import Admin from './components/Admin'
 import UserAuth from './components/UserAuth'
 import MarketPage from './components/MarketPage'
+import PasswordReset from './components/PasswordReset'
 import './App.css'
 
 function AppContent() {
   const [page, setPage] = useState('home')
   const { user, loading } = useAuth()
+
+  useEffect(() => {
+    // Check if URL contains reset token
+    const urlParams = new URLSearchParams(window.location.search)
+    const resetToken = urlParams.get('access_token')
+    if (resetToken) {
+      setPage('resetPassword')
+    }
+  }, [])
 
   if (loading) {
     return <div className="loading">Loading...</div>
@@ -26,6 +36,7 @@ function AppContent() {
   if (page === 'admin' && !user) return <Login onSuccess={() => setPage('admin')} onClose={() => setPage('home')} />
   if (page === 'userAuth') return <UserAuth onSuccess={() => setPage('home')} onClose={() => setPage('home')} />
   if (page === 'market') return <MarketPage onBack={() => setPage('home')} />
+  if (page === 'resetPassword') return <PasswordReset onSuccess={() => setPage('home')} onClose={() => setPage('home')} />
 
   return (
     <>

@@ -87,7 +87,7 @@ export default function Login({ onSuccess, onClose }) {
             required 
           />
           {forgotError && <p className="login-error">{forgotError}</p>}
-          {forgotSuccess && <p className="login-success">Password reset email sent! Check your inbox.</p>}
+          {forgotSuccess && <p className="login-success">If an account with that email exists, a password reset link has been sent. Please check your inbox and spam folder.</p>}
           <button type="submit">Send Reset Link</button>
           <p className="back-to-login">
             <span onClick={() => setShowForgotPassword(false)}>Back to Login</span>

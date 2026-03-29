@@ -95,8 +95,16 @@ export function AuthProvider({ children }) {
     return { ok: true }
   }
 
+  const resetPassword = async (password) => {
+    const { error } = await supabase.auth.updateUser({
+      password
+    })
+    if (error) return { ok: false, msg: error.message }
+    return { ok: true }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, adminLogin, adminLogout, forgotPassword }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, adminLogin, adminLogout, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import './Login.css'
 
@@ -13,6 +13,8 @@ export default function UserAuth({ onSuccess, onClose }) {
   const [forgotError, setForgotError] = useState('')
   const [forgotSuccess, setForgotSuccess] = useState(false)
   const [success, setSuccess] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [cooldown, setCooldown] = useState(0)
 
   const handle = e => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -39,17 +41,33 @@ export default function UserAuth({ onSuccess, onClose }) {
     }
   }
 
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [cooldown])
+
   const handleForgotPassword = async e => {
     e.preventDefault()
+    if (isSubmitting || cooldown > 0) return
+    
     setForgotError('')
     setForgotSuccess(false)
+    setIsSubmitting(true)
     
     const res = await forgotPassword(forgotEmail)
+    setIsSubmitting(false)
+    
     if (res.ok) {
       setForgotSuccess(true)
       setForgotEmail('')
+      setCooldown(60) // 1 minute cooldown
     } else {
       setForgotError(res.msg)
+      if (res.msg.includes('rate limit')) {
+        setCooldown(60) // 1 minute cooldown on rate limit error
+      }
     }
   }
 
@@ -114,8 +132,10 @@ export default function UserAuth({ onSuccess, onClose }) {
             required 
           />
           {forgotError && <p className="login-error">{forgotError}</p>}
-          {forgotSuccess && <p className="login-success">Password reset email sent! Check your inbox.</p>}
-          <button type="submit">Send Reset Link</button>
+          {forgotSuccess && <p className="login-success">If an account with that email exists, a password reset link has been sent. Please check your inbox and spam folder.</p>}
+          <button type="submit" disabled={isSubmitting || cooldown > 0}>
+            {isSubmitting ? 'Sending...' : cooldown > 0 ? `Try again in ${cooldown}s` : 'Send Reset Link'}
+          </button>
           <p className="back-to-login">
             <span onClick={() => setShowForgotPassword(false)}>Back to Login</span>
           </p>
