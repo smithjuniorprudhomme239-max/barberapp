@@ -12,6 +12,7 @@ const photos = [
 
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null)
+  const [showAll, setShowAll] = useState(false)
 
   const openLightbox = (src) => {
     setSelectedImage(src)
@@ -23,11 +24,13 @@ export default function Gallery() {
     document.body.style.overflow = 'auto'
   }
 
+  const displayPhotos = showAll ? photos : photos.slice(0, 1)
+
   return (
     <section id="gallery" className="section gallery">
       <h2>Gallery</h2>
       <div className="grid">
-        {photos.map((src, i) => (
+        {displayPhotos.map((src, i) => (
           <img 
             key={i} 
             src={src} 
@@ -37,6 +40,11 @@ export default function Gallery() {
             className="gallery-image"
           />
         ))}
+      </div>
+      <div className="gallery-mobile-footer">
+        <button className="view-more-btn" onClick={() => setShowAll(!showAll)}>
+          {showAll ? 'View Less' : 'View More'}
+        </button>
       </div>
 
       {selectedImage && (

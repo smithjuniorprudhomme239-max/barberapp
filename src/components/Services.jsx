@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './Services.css'
 
 const services = [
@@ -10,17 +11,26 @@ const services = [
 ]
 
 export default function Services() {
+  const [showAll, setShowAll] = useState(false)
+  
+  const displayServices = showAll ? services : services.slice(0, 3)
+  
   return (
     <section id="services" className="section services">
       <h2>Our Services</h2>
       <div className="cards">
-        {services.map(s => (
+        {displayServices.map(s => (
           <div key={s.name} className="card">
             <h3>{s.name}</h3>
             <p>{s.desc}</p>
             <span className="price">{s.price}</span>
           </div>
         ))}
+      </div>
+      <div className="services-mobile-footer">
+        <button className="view-more-btn" onClick={() => setShowAll(!showAll)}>
+          {showAll ? 'View Less' : 'View More'}
+        </button>
       </div>
     </section>
   )
