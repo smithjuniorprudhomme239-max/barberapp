@@ -46,7 +46,7 @@ export default function CatalogPage({ onBack }) {
   return (
     <div className="catalog-page">
       <header className="catalog-header">
-        <button className="back-button" onClick={onBack}>← Back</button>
+        <button className="catalog-back-button" onClick={onBack}>← Back</button>
         <h1>Catalog</h1>
         <div 
           className="cart-icon"

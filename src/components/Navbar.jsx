@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
 
-const links = ['Services', 'Gallery', 'About', 'Contact', 'Catalog']
+const links = ['Services', 'Gallery', 'About', 'Contact']
 
 export default function Navbar({ onAdminClick, onUserAuthClick, onMarketClick, onCatalogClick }) {
   const [open, setOpen] = useState(false)
@@ -16,7 +16,7 @@ export default function Navbar({ onAdminClick, onUserAuthClick, onMarketClick, o
         {links.map(l => (
           <li key={l}><a href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)}>{l}</a></li>
         ))}
-        <li><a href="#contact" className="btn-book" onClick={() => setOpen(false)}>Book Now</a></li>
+
         <li><button className="btn-book" onClick={() => { setOpen(false); onMarketClick(); }}>Market</button></li>
         <li><button className="btn-book" onClick={() => { setOpen(false); onCatalogClick(); }}>Catalog</button></li>
         <li>

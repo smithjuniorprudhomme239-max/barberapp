@@ -14,12 +14,13 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .back-button {
-  background: none;
-  border: 1px solid #f5c518;
-  color: #f5c518;
+  background: #cc0000;
+  border: 1px solid #cc0000;
+  color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -28,8 +29,8 @@
 }
 
 .back-button:hover {
-  background: #f5c518;
-  color: #111;
+  background: #a80000;
+  border-color: #a80000;
 }
 
 .market-header h1 {
