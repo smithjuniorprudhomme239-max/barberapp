@@ -38,8 +38,52 @@ export default function MarketPage({ onBack }) {
     fetchProducts()
   }, [])
 
+  const parsePrice = (price) => {
+    if (typeof price === 'number') return price
+    const numeric = parseFloat(price?.toString().replace(/[^0-9.-]+/g, ''))
+    return Number.isFinite(numeric) ? numeric : 0
+  }
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount)
+  }
+
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const cartTotal = cart.reduce((sum, item) => sum + parsePrice(item.price) * item.quantity, 0)
+
   const addToCart = (product) => {
-    setCart([...cart, product])
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id)
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      }
+      return [...prevCart, { ...product, quantity: 1 }]
+    })
+  }
+
+  const updateCartQuantity = (productId, delta) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + delta }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    )
+  }
+
+  const removeCartItem = (productId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId))
+  }
+
+  const clearCart = () => {
+    setCart([])
   }
 
   const toggleCart = () => {
@@ -58,7 +102,7 @@ export default function MarketPage({ onBack }) {
 
   const checkout = async () => {
     if (!user) {
-      setCheckoutError('Please login to checkout')
+      setCheckoutError('Please login to submit your cart')
       return
     }
 
@@ -71,15 +115,25 @@ export default function MarketPage({ onBack }) {
     setCheckoutError('')
     setCheckoutSuccess(false)
 
+    const orderItems = cart.map((item) => ({
+      product_id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      unit_price: parsePrice(item.price),
+      subtotal: parsePrice(item.price) * item.quantity,
+      image: item.image
+    }))
+
+    const total = orderItems.reduce((sum, item) => sum + item.subtotal, 0)
+
     try {
-      // Create order in Supabase
       const { data, error } = await supabase
         .from('orders')
         .insert({
           user_id: user.id,
           user_email: user.email,
-          items: cart,
-          total: cart.length,
+          items: orderItems,
+          total,
           status: 'pending'
         })
         .select()
@@ -87,17 +141,17 @@ export default function MarketPage({ onBack }) {
 
       if (error) {
         console.error('Error creating order:', error)
-        setCheckoutError('Failed to create order')
+        setCheckoutError('Failed to submit cart')
       } else {
         console.log('Order created successfully:', data)
         setCheckoutSuccess(true)
         setCart([])
-        // Clear success message after 3 seconds
+        setShowCart(false)
         setTimeout(() => setCheckoutSuccess(false), 3000)
       }
     } catch (error) {
       console.error('Error checking out:', error)
-      setCheckoutError('Failed to checkout')
+      setCheckoutError('Failed to submit cart')
     } finally {
       setCheckingOut(false)
     }
@@ -156,33 +210,57 @@ export default function MarketPage({ onBack }) {
       {/* Cart Section */}
       {showCart && (
         <section className="cart-section">
-          <h2>Your Cart ({cart.length})</h2>
+          <div className="cart-header-row">
+            <h2>Your Cart</h2>
+            <div className="cart-count">
+              <span>{cart.length} item types</span>
+              <span>{cartItemCount} total items</span>
+              <span>Total: {formatCurrency(cartTotal)}</span>
+            </div>
+          </div>
+
           <div className="cart-items">
             {cart.length > 0 ? (
-              cart.map((item, index) => (
-                <div key={index} className="cart-item">
-                  <span>{item.name}</span>
-                  <span>{item.price}</span>
+              cart.map((item) => (
+                <div key={item.id} className="cart-item">
+                  <div className="cart-item-details">
+                    <div>
+                      <span className="cart-item-name">{item.name}</span>
+                      <span className="cart-item-price">{formatCurrency(parsePrice(item.price))} each</span>
+                    </div>
+                    <div className="cart-item-actions">
+                      <button type="button" onClick={() => updateCartQuantity(item.id, -1)}>-</button>
+                      <span>{item.quantity}</span>
+                      <button type="button" onClick={() => updateCartQuantity(item.id, 1)}>+</button>
+                      <span className="cart-item-subtotal">{formatCurrency(parsePrice(item.price) * item.quantity)}</span>
+                      <button type="button" className="remove-item-btn" onClick={() => removeCartItem(item.id)}>Remove</button>
+                    </div>
+                  </div>
                 </div>
               ))
             ) : (
               <p className="empty-cart">Your cart is empty</p>
             )}
           </div>
+
           {checkoutError && (
             <div className="error-message">{checkoutError}</div>
           )}
           {checkoutSuccess && (
-            <div className="success-message">Order placed successfully!</div>
+            <div className="success-message">Cart submitted successfully!</div>
           )}
+
           {cart.length > 0 && (
-            <button 
-              className="checkout-btn"
-              onClick={checkout}
-              disabled={checkingOut}
-            >
-              {checkingOut ? 'Processing...' : 'Checkout'}
-            </button>
+            <div className="cart-actions-row">
+              <button type="button" className="clear-cart-btn" onClick={clearCart}>Clear Cart</button>
+              <button 
+                className="checkout-btn"
+                onClick={checkout}
+                disabled={checkingOut}
+              >
+                {checkingOut ? 'Submitting...' : 'Submit Cart'}
+              </button>
+            </div>
           )}
         </section>
       )}

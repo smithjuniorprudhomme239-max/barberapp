@@ -112,6 +112,35 @@ export default function Admin({ onLogout }) {
     }
   }
 
+  const parsePrice = (value) => {
+    if (typeof value === 'number') return value
+    const numeric = parseFloat(value?.toString().replace(/[^0-9.-]+/g, ''))
+    return Number.isFinite(numeric) ? numeric : 0
+  }
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount)
+  }
+
+  const toggleOrderStatus = async (orderId, currentStatus) => {
+    const isCompleted = currentStatus === 'completed' || currentStatus === true
+    const nextStatus = isCompleted ? 'pending' : 'completed'
+
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: nextStatus })
+      .eq('id', orderId)
+
+    if (error) {
+      console.error('Error updating order status:', error)
+    } else {
+      fetchOrders()
+    }
+  }
+
   const handleLogout = async () => { 
     await adminLogout()
     onLogout() 
@@ -218,7 +247,7 @@ export default function Admin({ onLogout }) {
                       <td>{b.phone}</td>
                       <td>{b.email || '—'}</td>
                       <td><span className="service-tag">{b.service}</span></td>
-                      <td>{new Date(b.date).toLocaleString('en-US')}</td>
+                      <td>{new Date(b.date).toLocaleString('en-US', { timeZone: 'America/New_York' })}</td>
                       <td>
                         <span className={`status-badge ${b.status ? 'status-completed' : 'status-pending'}`}>
                           {b.status ? 'Completed' : 'Pending'}
@@ -258,29 +287,48 @@ export default function Admin({ onLogout }) {
                     <th>Total</th>
                     <th>Status</th>
                     <th>Order Date</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order, i) => (
-                    <tr key={order.id}>
-                      <td>{i + 1}</td>
-                      <td>{order.user_email}</td>
-                      <td>
-                        <ul style={{ margin: 0, paddingLeft: '1rem' }}>
-                          {order.items.map((item, idx) => (
-                            <li key={idx}>{item.name}</li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td>{order.total}</td>
-                      <td>
-                        <span className={`status-badge ${order.status === 'completed' ? 'status-completed' : 'status-pending'}`}>
-                          {order.status}
-                        </span>
-                      </td>
-                      <td>{new Date(order.created_at).toLocaleString('en-US')}</td>
-                    </tr>
-                  ))}
+                  {orders.map((order, i) => {
+                    const orderItems = Array.isArray(order.items) ? order.items : []
+                    const totalAmount = formatCurrency(parsePrice(order.total))
+                    const isCompleted = order.status === 'completed' || order.status === true
+
+                    return (
+                      <tr key={order.id}>
+                        <td>{i + 1}</td>
+                        <td>{order.user_email || 'Unknown'}</td>
+                        <td>
+                          <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                            {orderItems.map((item, idx) => (
+                              <li key={idx}>
+                                {item.name}
+                                {item.quantity ? ` x ${item.quantity}` : ''}
+                                {item.subtotal != null ? ` — ${formatCurrency(parsePrice(item.subtotal))}` : ''}
+                              </li>
+                            ))}
+                          </ul>
+                        </td>
+                        <td>{totalAmount}</td>
+                        <td>
+                          <span className={`status-badge ${isCompleted ? 'status-completed' : 'status-pending'}`}>
+                            {isCompleted ? 'completed' : 'pending'}
+                          </span>
+                        </td>
+                        <td>{new Date(order.created_at).toLocaleString('en-US')}</td>
+                        <td>
+                          <button
+                            className={`status-toggle ${isCompleted ? 'toggle-completed' : 'toggle-pending'}`}
+                            onClick={() => toggleOrderStatus(order.id, order.status)}
+                          >
+                            {isCompleted ? 'Mark as Pending' : 'Mark as Completed'}
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>

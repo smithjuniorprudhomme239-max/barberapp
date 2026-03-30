@@ -32,10 +32,12 @@ export default function Contact() {
 
     setLoading(true)
     try {
-      // Parse the selected date to get start and end of day
+      // Parse the selected date to get start and end of day in UTC
       const selectedDate = new Date(date)
-      const startOfDay = new Date(selectedDate.setHours(0, 0, 0, 0))
-      const endOfDay = new Date(selectedDate.setHours(23, 59, 59, 999))
+      const startOfDay = new Date(selectedDate)
+      startOfDay.setHours(0, 0, 0, 0)
+      const endOfDay = new Date(selectedDate)
+      endOfDay.setHours(23, 59, 59, 999)
 
       const { data, error: supabaseError } = await supabase
         .from('bookings')
@@ -140,10 +142,15 @@ export default function Contact() {
 
     if (!user) return setError('Please login or sign up to book an appointment.')
 
+    // Convert local date string to UTC ISO string
+    const dateObj = new Date(form.date)
+    const utcDate = dateObj.toISOString()
+
     const { data, error: supabaseError } = await supabase
       .from('bookings')
       .insert({
         ...form,
+        date: utcDate,
         user_id: user.id
       })
       .select()
@@ -217,7 +224,7 @@ export default function Contact() {
                   <ul className="appointments-list">
                     {userAppointments.map((appointment, index) => (
                       <li key={index} className="appointment-item">
-                        <span className="appointment-time">{new Date(appointment.date).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</span>
+                        <span className="appointment-time">{new Date(appointment.date).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'America/New_York' })}</span>
                         <span className="appointment-service">{appointment.service}</span>
                         <button className={`appointment-status-btn ${appointment.status ? 'status-completed' : 'status-pending'}`}>
                           {appointment.status ? 'Completed' : 'Pending'}
@@ -238,7 +245,7 @@ export default function Contact() {
             {/* Booked Appointments for Selected Date */}
             {form.date && (
               <div className="booked-appointments">
-                <h3>Booked Appointments for {new Date(form.date).toLocaleDateString('en-US')}</h3>
+                <h3>Booked Appointments for {new Date(form.date).toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</h3>
                 {loading ? (
                   <p>Loading booked appointments...</p>
                 ) : bookedAppointments.length === 0 ? (
@@ -247,7 +254,7 @@ export default function Contact() {
                   <ul className="appointments-list">
                     {bookedAppointments.map((appointment, index) => (
                       <li key={index} className="appointment-item">
-                        <span className="appointment-time">{new Date(appointment.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span>
+                        <span className="appointment-time">{new Date(appointment.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'America/New_York' })}</span>
                         <span className="appointment-status">Booked</span>
                       </li>
                     ))}
