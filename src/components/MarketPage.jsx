@@ -120,8 +120,7 @@ export default function MarketPage({ onBack }) {
       name: item.name,
       quantity: item.quantity,
       unit_price: parsePrice(item.price),
-      subtotal: parsePrice(item.price) * item.quantity,
-      image: item.image
+      subtotal: parsePrice(item.price) * item.quantity
     }))
 
     const total = orderItems.reduce((sum, item) => sum + item.subtotal, 0)
@@ -172,6 +171,11 @@ export default function MarketPage({ onBack }) {
         </div>
       </header>
 
+      {/* Construction Notice */}
+      <div className="construction-notice">
+        <p>Webapp in construction</p>
+      </div>
+
       {/* Products Grid */}
       <section className="products-grid">
         {loading ? (
@@ -185,9 +189,6 @@ export default function MarketPage({ onBack }) {
               className="product-card"
               onClick={() => openLightbox(product)}
             >
-              <div className="product-image">
-                <img src={product.image} alt={product.name} />
-              </div>
               <div className="product-info">
                 <h3>{product.name}</h3>
                 <p className="product-price">{product.price}</p>
@@ -271,9 +272,6 @@ export default function MarketPage({ onBack }) {
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <button className="lightbox-close" onClick={closeLightbox}>×</button>
             <div className="product-card lightbox-product-card">
-              <div className="product-image">
-                <img src={selectedProduct.image} alt={selectedProduct.name} />
-              </div>
               <div className="product-info">
                 <h3>{selectedProduct.name}</h3>
                 <p className="product-price">{selectedProduct.price}</p>

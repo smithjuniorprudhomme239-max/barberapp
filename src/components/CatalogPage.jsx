@@ -14,14 +14,14 @@ export default function CatalogPage({ onBack }) {
       {
         id: 1,
         name: 'Classic Taper',
-        image: 'https://i.postimg.cc/zGWw7JxK/mens-haircuts-military-fade.jpg',
+        image: placeholderImage,
       },
       {
         id: 2,
         name: 'Fade',
         price: '$40',
         description: 'A modern haircut with seamless transition from short to long hair.',
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'Choose from low, mid, or high fade. This cut requires regular maintenance every 2-3 weeks for optimal sharpness.'
       },
       {
@@ -29,7 +29,7 @@ export default function CatalogPage({ onBack }) {
         name: 'Bald Fade',
         price: '$45',
         description: 'A dramatic fade that transitions to completely bald on the sides.',
-        image: 'https://images.unsplash.com/photo-1508654472847-b58d54348590?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'Highly popular for its clean, polished look. Perfect for those who want a bold, modern appearance.'
       },
       {
@@ -37,7 +37,7 @@ export default function CatalogPage({ onBack }) {
         name: 'Pompadour',
         price: '$50',
         description: 'A classic style with volume on top and tapered sides.',
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'Requires styling products for maintenance. Our barbers will show you how to style it at home.'
       },
       {
@@ -45,7 +45,7 @@ export default function CatalogPage({ onBack }) {
         name: 'Undercut',
         price: '$40',
         description: 'Short sides with longer hair on top for a bold contrast.',
-        image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'Versatile and low-maintenance, can be styled in multiple ways for different occasions.'
       },
       {
@@ -53,7 +53,7 @@ export default function CatalogPage({ onBack }) {
         name: 'Textured Crop',
         price: '$35',
         description: 'Short, textured hair on top with clean sides.',
-        image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'Perfect for a casual, effortless look. Works well with natural hair texture.'
       },
       {
@@ -61,7 +61,7 @@ export default function CatalogPage({ onBack }) {
         name: 'French Crop',
         price: '$38',
         description: 'Short front with longer top and textured finish.',
-        image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'A stylish, low-maintenance option that works for most hair types.'
       },
       {
@@ -69,7 +69,7 @@ export default function CatalogPage({ onBack }) {
         name: 'Side Part',
         price: '$35',
         description: 'Classic side part with clean lines and polished finish.',
-        image: 'https://images.unsplash.com/photo-1551024709-8f23befc6e9d?auto=format&fit=crop&w=800&q=80',
+        image: placeholderImage,
         details: 'A timeless look that never goes out of style. Perfect for formal occasions.'
       }
     ]
@@ -111,6 +111,11 @@ export default function CatalogPage({ onBack }) {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
+      </div>
+
+      {/* Construction Notice */}
+      <div className="construction-notice">
+        <p>Webapp in construction</p>
       </div>
 
       {/* Hairstyles Grid */}
