@@ -9,6 +9,8 @@ export default function Admin({ onLogout }) {
   const [availabilityMessage, setAvailabilityMessage] = useState('')
   const [loadingMessage, setLoadingMessage] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const [orders, setOrders] = useState([])
+  const [loadingOrders, setLoadingOrders] = useState(false)
 
   const fetchBookings = async () => {
     console.log('Fetching bookings...')
@@ -24,6 +26,24 @@ export default function Admin({ onLogout }) {
       console.log('Bookings fetched:', data)
       setBookings(Array.isArray(data) ? data : [])
       setLoading(false)
+    }
+  }
+
+  const fetchOrders = async () => {
+    console.log('Fetching orders...')
+    setLoadingOrders(true)
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching orders:', error)
+      setLoadingOrders(false)
+    } else {
+      console.log('Orders fetched:', data)
+      setOrders(Array.isArray(data) ? data : [])
+      setLoadingOrders(false)
     }
   }
 
@@ -73,6 +93,7 @@ export default function Admin({ onLogout }) {
   useEffect(() => {
     fetchBookings()
     fetchAvailabilityMessage()
+    fetchOrders()
   }, [])
 
   const toggleBookingStatus = async (bookingId, currentStatus) => {
@@ -167,7 +188,7 @@ export default function Admin({ onLogout }) {
           </div>
         </div>
 
-        {/* Table */}
+        {/* Bookings Table */}
         <div className="admin-table-wrap">
           <h2>All Bookings</h2>
           {loading ? (
@@ -211,6 +232,53 @@ export default function Admin({ onLogout }) {
                           {b.status ? 'Mark as Pending' : 'Mark as Completed'}
                         </button>
                       </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Orders Table */}
+        <div className="admin-table-wrap">
+          <h2>Market Orders</h2>
+          {loadingOrders ? (
+            <p className="no-bookings">Loading...</p>
+          ) : orders.length === 0 ? (
+            <p className="no-bookings">No orders yet.</p>
+          ) : (
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>User Email</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Order Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order, i) => (
+                    <tr key={order.id}>
+                      <td>{i + 1}</td>
+                      <td>{order.user_email}</td>
+                      <td>
+                        <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                          {order.items.map((item, idx) => (
+                            <li key={idx}>{item.name}</li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>{order.total}</td>
+                      <td>
+                        <span className={`status-badge ${order.status === 'completed' ? 'status-completed' : 'status-pending'}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td>{new Date(order.created_at).toLocaleString('en-US')}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../context/AuthContext'
+import { supabase, useAuth } from '../context/AuthContext'
 import './MarketPage.css'
 
 export default function MarketPage({ onBack }) {
+  const { user } = useAuth()
   const [products, setProducts] = useState([])
   const [cart, setCart] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [showCart, setShowCart] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [checkingOut, setCheckingOut] = useState(false)
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false)
+  const [checkoutError, setCheckoutError] = useState('')
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,6 +54,53 @@ export default function MarketPage({ onBack }) {
   const closeLightbox = () => {
     setSelectedProduct(null)
     document.body.style.overflow = 'auto'
+  }
+
+  const checkout = async () => {
+    if (!user) {
+      setCheckoutError('Please login to checkout')
+      return
+    }
+
+    if (cart.length === 0) {
+      setCheckoutError('Your cart is empty')
+      return
+    }
+
+    setCheckingOut(true)
+    setCheckoutError('')
+    setCheckoutSuccess(false)
+
+    try {
+      // Create order in Supabase
+      const { data, error } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          user_email: user.email,
+          items: cart,
+          total: cart.length,
+          status: 'pending'
+        })
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error creating order:', error)
+        setCheckoutError('Failed to create order')
+      } else {
+        console.log('Order created successfully:', data)
+        setCheckoutSuccess(true)
+        setCart([])
+        // Clear success message after 3 seconds
+        setTimeout(() => setCheckoutSuccess(false), 3000)
+      }
+    } catch (error) {
+      console.error('Error checking out:', error)
+      setCheckoutError('Failed to checkout')
+    } finally {
+      setCheckingOut(false)
+    }
   }
 
   return (
@@ -118,8 +169,20 @@ export default function MarketPage({ onBack }) {
               <p className="empty-cart">Your cart is empty</p>
             )}
           </div>
+          {checkoutError && (
+            <div className="error-message">{checkoutError}</div>
+          )}
+          {checkoutSuccess && (
+            <div className="success-message">Order placed successfully!</div>
+          )}
           {cart.length > 0 && (
-            <button className="checkout-btn">Checkout</button>
+            <button 
+              className="checkout-btn"
+              onClick={checkout}
+              disabled={checkingOut}
+            >
+              {checkingOut ? 'Processing...' : 'Checkout'}
+            </button>
           )}
         </section>
       )}
